@@ -15,11 +15,11 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv,"hi:o:l:",["ifile=","ofile=","length="])
     except getopt.GetoptError:
-      print 'BamMan.py -i <inputfile> -o <outputfile>'
+      print 'BamManuplation.py -i <inputfile> -o <outputfile>'
       sys.exit(2)
     for opt, arg in opts:
         if opt == '-h':
-            print 'BamMan.py -i <inputfile> -o <outputfile>'
+            print 'BamManuplation.py -i <inputfile> -o <outputfile>'
             sys.exit()
         elif opt in ("-i", "--ifile"):
             inputFile = arg
