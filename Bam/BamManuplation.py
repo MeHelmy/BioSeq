@@ -2,6 +2,8 @@
 Created on 26 Nov 2013
 
 @author: medhat
+This module takes a SAM file and remove short reads < n and write it to new file also it counts the coverage by accumulating 
+the length of sequence that > n to totalSequenceLength and writes the result in an output .count file
 '''
 import re, sys , getopt
 totalSequenceLength = 0
