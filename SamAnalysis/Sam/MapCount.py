@@ -63,6 +63,8 @@ def dictCount(resultDictionary):
             fo.write(key+"\t"+str(value)+"\n")
         fo.close()
         
+       
+        
 if __name__ == "__main__":
     main(sys.argv[1:])         
         
