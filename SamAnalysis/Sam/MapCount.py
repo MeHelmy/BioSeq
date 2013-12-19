@@ -8,6 +8,7 @@ Algorithm
 check if -F parameter != 4
 if so 
 add the read to dictionary as a key and the value is number of time it was repeated
+and in other dictionary add the read to dictionary as a key and the value is length of sequence was mapped
 '''
 
 import sys , getopt
@@ -26,8 +27,8 @@ def main(argv):
             sys.exit()
         elif opt in ("-i", "--ifile"):
             inputFile = arg
-            mapRead = countReads(inputFile)
-            dictCount(mapRead)         
+            mapRead , lengthOfMappedReads = countReads(inputFile)
+            dictCount(mapRead , lengthOfMappedReads)         
     
     
 def is_empty(any_structure):
@@ -42,26 +43,38 @@ def is_empty(any_structure):
 def countReads(samFile):
     if samFile:
         mappedReads={}
+        lengthMappedReads={}
         samData=open(samFile,'r')
         for line in samData: 
             if not line.startswith("@"):
                 colum=line.split('\t')
                 if not int(colum[1]) == 4:  #means that it was aligned
                     if colum[0] not in mappedReads:
-                        mappedReads[colum[0]]=1
+                        mappedReads[colum[0]]=1 
+                        lengthMappedReads[colum[0]]= int(len(colum[9]))
                     else:
                         mappedReads[colum[0]] = int(mappedReads[colum[0]])+1
-        return mappedReads
+        return mappedReads , seqCount(lengthMappedReads)
                          
                         
 # input dictionary output text file of the count of the dictionary and print of name and value
-def dictCount(resultDictionary):
-    if not is_empty(resultDictionary):
+def dictCount(mapRead , lengthOfMappedReads):
+    if not is_empty(mapRead) and not is_empty(lengthOfMappedReads):
         fo = open('mappedReads.txt','a')
-        fo.write("Number of mapped reads is ==> "+str(len(resultDictionary.keys()))+" <== \n ======================== \n")
-        for key , value in resultDictionary.iteritems():
+        fo.write("Number of mapped reads is ==> "+str(len(mapRead.keys()))+" <== \n ======================== \n")
+        fo.write("Count of mapped reads is ==> "+str(lengthOfMappedReads)+" <== \n ======================== \n")
+        for key , value in mapRead.iteritems():
             fo.write(key+"\t"+str(value)+"\n")
         fo.close()
+        
+def seqCount(countDictionary):
+    if not is_empty(countDictionary):
+        countOfSequence =0
+        for key , value in countDictionary.iteritems():
+            countOfSequence+=value
+    return countOfSequence        
+        
+            
         
        
         
