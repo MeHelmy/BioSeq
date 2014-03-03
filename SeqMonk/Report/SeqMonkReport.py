@@ -30,7 +30,7 @@ def is_empty(any_structure):
         return True
     
 def getId(inputFile):
-    if file:
+    if inputFile:
         fileData = open(inputFile,'r')
         data = []
         for line in fileData:
