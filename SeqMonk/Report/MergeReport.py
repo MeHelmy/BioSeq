@@ -54,7 +54,7 @@ def addToDicFromFile(dictionary , inputFile,i,header):
                 fileName = inputFile.rsplit('/',1)[1]
                 
             logsColumn = re.findall(r'\d+',fileName)
-            log = float(colum[int(logsColumn[0])])/float(colum[int(logsColumn[1])])
+            log = float(colum[int(logsColumn[0])]) - float(colum[int(logsColumn[1])])
             pValue = colum[5]
             if geneId not in dictionary:
                     if i == 1:
