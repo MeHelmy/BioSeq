@@ -3,7 +3,7 @@ Created on Feb 26, 2014
 
 @author: medhat
 '''
-import sys , getopt , re
+import sys , getopt , re 
 
 
 def main(argv):
@@ -25,9 +25,14 @@ def main(argv):
 
 def getMergeDataFromFile(inputFile):
         fileData = open(inputFile,'r')
+        num_lines = sum(1 for row in open(inputFile) if row.rstrip())
         i = 1
         mergedData = {}
         header = 'GenId\tDiscription'
+        num = 1
+        while (num <= num_lines):
+            header = header + '\tSample-' + str(num)
+            num = num +1
         for line in fileData:
             header = addToDicFromFile(mergedData, line , i,header)
             i+=1
@@ -49,6 +54,12 @@ def addToDicFromFile(dictionary , inputFile,i,header):
         for line in fileData:
             colum=line.split('\t')
             geneId = str(colum[7])
+            sample1 = str(colum[12])
+            sample2 = str(colum[13])
+            sample3 = str(colum[14])
+            sample4 = str(colum[15])
+            samples = sample1 + '\t' + sample2 + '\t' + sample3 + '\t' + sample4
+            samples = samples.rstrip('\n')
             disc = colum[8]
             if '/' in inputFile:
                 fileName = inputFile.rsplit('/',1)[1]
@@ -58,14 +69,14 @@ def addToDicFromFile(dictionary , inputFile,i,header):
             pValue = colum[5]
             if geneId not in dictionary:
                     if i == 1:
-                        dictionary[geneId] = geneId + '\t' + disc + '\t' + str(log) + '\t' + pValue
+                        dictionary[geneId] = geneId + '\t' + disc +'\t' + samples + '\t' + str(log) + '\t' + pValue
                     else:
-                        dictionary[geneId] = geneId + '\t' + disc + '\t' + begin + str(log) + '\t' + pValue 
+                        dictionary[geneId] = geneId + '\t' + disc +'\t' + samples + '\t' + begin + str(log) + '\t' + pValue 
             else:        
                     dictionary[geneId] = dictionary[geneId] +  '\t' + str(log) + '\t' + pValue
         return header           
 def writeDic(dic ,header):
-    fo = open('tes_merged_seq_report.txt','a')
+    fo = open('merged_seq_report.txt','a')
     fo.write(header + '\n')
     defaultLength = len(header.split('\t'))
     for value in dic.itervalues():
