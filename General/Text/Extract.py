@@ -6,6 +6,7 @@ Created on Mar 10, 2014
 import sys , getopt
 
 #===============================================================================
+#extract data
 # def main(argv):
 #     inputFile = ''
 # 
