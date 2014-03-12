@@ -6,37 +6,39 @@ Created on Mar 10, 2014
 import sys , getopt
 
 #===============================================================================
-#extract data
 # def main(argv):
 #     inputFile = ''
-# 
+#   
 #     try:
-#         opts, args = getopt.getopt(argv,"hi:",["ifile="])
+#         opts, args = getopt.getopt(argv, "hi:", ["ifile="])
 #     except getopt.GetoptError:
-#         print 'ExonLength.py -i <inputfile>'
+#         print 'Extract.py -i <inputfile>'
 #         sys.exit(2)
 #     for opt, arg in opts:
 #         if opt == '-h':
-#             print 'ExonLength.py -i <inputfile>'
+#             print 'Extract.py -i <inputfile>'
 #             sys.exit()
 #         elif opt in ("-i", "--ifile"):
 #             inputFile = arg
 #             extractData(inputFile)
 #===============================================================================
-# function take file as input and extract data based on a column and write it to output file
+             
+ # function take file as input and extract data based on a column and write it to output file
 def extractData(inputFile):
+    print(inputFile)
     if inputFile:
-        fileData =  open(inputFile, 'r')
-        fo = open('extractedData.txt','a')
-        genIdFile = open('GenIds.txt' ,'a')
+        fileData = open(inputFile, 'r')
+        fo = open('extractedData.txt','w')
+        genIdFile = open('GenIds.txt' ,'w')
         header = extractHeader(inputFile)
         fo.write(header)
         fileData.next()
         for line in fileData:
             lineColumns = line.split('\t')
-            if (float(lineColumns[10]) < 0) :
+            if (float(lineColumns[12]) < 0) :
                 fo.write(line)
-                genIdFile.write(str(lineColumns[0])+'\n')
+                genIdFile.write(str(lineColumns[0]) + '\t' + str(lineColumns[2]) + '\t' + str(lineColumns[3])+ '\n')
+                
         fo.close()
         genIdFile.close()        
  
@@ -45,4 +47,4 @@ def extractHeader(inFile):
         first_line = f.readline()
         return first_line 
     
-extractData('/home/medhat/Downloads/Samples/merge_test/merged_seq_report_sorted.txt')                     
+extractData("/home/medhat/Samples/merge_test/merged_seq_report_sorted.txt")
