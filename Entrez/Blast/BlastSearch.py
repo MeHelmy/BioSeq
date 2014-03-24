@@ -9,11 +9,9 @@ from Bio.Blast import NCBIXML
 import os  ,sys , getopt ,copy
 
 def main(argv):
-    print(argv)
     scriptName = os.path.basename(__file__)
     try:
         opts, args = getopt.getopt(argv, "hi:o:", ["ifile=", "ofile="])
-        
     except getopt.GetoptError:
         print scriptName + ' -i <inputfile>'
         sys.exit(2)
@@ -25,7 +23,6 @@ def main(argv):
             inputFile = arg
         elif opt in ("-o", "--ofile"):
             outputFile = arg
-            print(outputFile)    
     loopDirectory(inputFile, outputFile)        
 
 #Read all the files in directory and process them one by one
