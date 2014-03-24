@@ -8,7 +8,7 @@ import sys , getopt
 #===============================================================================
 # def main(argv):
 #     inputFile = ''
-#   
+#    
 #     try:
 #         opts, args = getopt.getopt(argv, "hi:", ["ifile="])
 #     except getopt.GetoptError:
@@ -29,15 +29,24 @@ def extractData(inputFile):
     if inputFile:
         fileData = open(inputFile, 'r')
         fo = open('extractedData.txt','w')
-        genIdFile = open('GenIds.txt' ,'w')
+        genIdFile = open('GenIds.bed' ,'w')
         header = extractHeader(inputFile)
         fo.write(header)
         fileData.next()
         for line in fileData:
             lineColumns = line.split('\t')
-            if (float(lineColumns[12]) < 0) :
+            if (float(lineColumns[14]) < 0) :
                 fo.write(line)
-                genIdFile.write(str(lineColumns[0]) + '\t' + str(lineColumns[2]) + '\t' + str(lineColumns[3])+ '\n')
+                #genIdFile.write(str(lineColumns[0]) + '\t' + str(lineColumns[2]) + '\t' + str(lineColumns[3])+ '\t' + str(lineColumns[4])+'\n')
+                direction = lineColumns[5]
+                direction = direction.strip()
+                fastaName = str(lineColumns[0])
+                if direction == '+':
+                    fastaName=fastaName +'\t1\t+'
+                else:
+                    fastaName=fastaName +'\t1\t-'
+                
+                genIdFile.write(str(lineColumns[2]) + '\t' + str(lineColumns[3]) + '\t' + str(lineColumns[4])+ '\t' + fastaName +'\n')
                 
         fo.close()
         genIdFile.close()        

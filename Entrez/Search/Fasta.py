@@ -4,7 +4,9 @@ Created on Mar 11, 2014
 @author: medhat
 '''
 from Bio import Entrez
+from Bio.Seq import Seq
 from urllib2 import HTTPError
+from Bio.Alphabet import IUPAC
 import os , time ,sys , getopt
 
 
@@ -36,22 +38,26 @@ def getFasta(inputFile):
         if inputFile:
             fileData = open(inputFile , 'r')
             missedSequence=[]
+            count = 1
             for line in fileData:
                 lineSpliced = line.split('\t')
                 geneId = lineSpliced[0]
                 start = int(lineSpliced[1])
                 end = int(lineSpliced[2])
+                strand = lineSpliced[3]
                 
                 # get data from ncbi
                 handle = Entrez.esearch(db="nucleotide", term=geneId)
                 record = Entrez.read(handle)
-                
+               
                 if not is_empty(record["IdList"]):
                     recordId = record["IdList"][0]
                     handleSeq = Entrez.efetch(db="nucleotide", id=recordId, rettype="fasta", retmode="text")
                     of = open(resultFolder+"/"+geneId+".txt", "w")
                     fastaData = handleSeq.read()
-                    newSeq = cutSeq(fastaData, start, end)
+                    print(str(count)+" ========> Gene ID " + geneId)
+                    count = count + 1
+                    newSeq = cutSeq(fastaData, start, end , strand)
                     of.write(newSeq)
                     time.sleep(1)
                     of.close()
@@ -63,8 +69,10 @@ def getFasta(inputFile):
         print "Oops!  That was ERROR.  Try again..."
         
 # function to cut the data according to the coordinates 
-def cutSeq(seq , start , end):
+def cutSeq(seq , start , end , strand):
     try:
+        #print(strand+"  "+type(strand))
+        
         if seq and start and end:
             # overcome the python 0 counting
             start = start - 1
@@ -73,6 +81,10 @@ def cutSeq(seq , start , end):
             sansfirstline = '\n'.join(seq.split('\n')[1:])
             sequenc = sansfirstline[start:end]
             # if it is - strand get the complimentry
+            strand = strand.strip()
+            if (strand == '-'):
+                sequenc = Seq(sequenc , IUPAC.unambiguous_dna)
+                sequenc = complementStrand(sequenc)
             content = header +'\n'+sequenc
             return  content
             
@@ -92,7 +104,11 @@ def printList(data):
         fo = open("lost.txt","a")
         for elment in data:
             fo.write(elment+'\n')
-        fo.close()                
+        fo.close()
+        
+def complementStrand(strand):
+        strand = strand.reverse_complement() 
+        return  str(strand)                   
 print("========  BEGINNINGING =========")         
 lost = getFasta("/home/medhat/Samples/merge_test/GenIds.txt")
 print("========  WRITE THE LIST =========")

@@ -5,8 +5,10 @@ Created on Dec 10, 2013
 
 This module get smallest and largest introns
 '''
-import matplotlib.pyplot as plot , collections ,sys , getopt
-from matplotlib.sphinxext.plot_directive import align
+#import matplotlib.pyplot as plot , collections ,
+import sys , getopt ,collections 
+import matplotlib.pyplot as plot 
+#from matplotlib.sphinxext.plot_directive import align
 
 
 def main(argv):

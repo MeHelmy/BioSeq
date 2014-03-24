@@ -28,7 +28,7 @@ def getMergeDataFromFile(inputFile):
         num_lines = sum(1 for row in open(inputFile) if row.rstrip())
         i = 1
         mergedData = {}
-        header = 'GenId\tDiscription\tStart\tEnd\tStrand'
+        header = 'GenId\tDiscription\tChr\tStart\tEnd\tStrand'
         num = 1
         while (num <= num_lines):
             header = header + '\tSample-' + str(num)
@@ -64,6 +64,7 @@ def addToDicFromFile(dictionary , inputFile,i,header):
             start = colum[2]
             end = colum[3]
             strand = colum[4]
+            chromosome = "chr"+str(colum[1])
             if '/' in inputFile:
                 fileName = inputFile.rsplit('/',1)[1]
                 
@@ -72,9 +73,9 @@ def addToDicFromFile(dictionary , inputFile,i,header):
             pValue = colum[5]
             if geneId not in dictionary:
                     if i == 1:
-                        dictionary[geneId] = geneId + '\t' + disc + '\t' + start + '\t' + end + '\t' + strand + '\t' + samples + '\t' + str(log) + '\t' + pValue
+                        dictionary[geneId] = geneId + '\t' + disc + '\t' + chromosome +'\t'+start + '\t' + end + '\t' + strand + '\t' + samples + '\t' + str(log) + '\t' + pValue
                     else:
-                        dictionary[geneId] = geneId + '\t' + disc + '\t' + start + '\t' + end + '\t' + strand + '\t' + samples + '\t' + begin + str(log) + '\t' + pValue 
+                        dictionary[geneId] = geneId + '\t' + disc + '\t' + chromosome + '\t' + start + '\t' + end + '\t' + strand + '\t' + samples + '\t' + begin + str(log) + '\t' + pValue 
             else:        
                     dictionary[geneId] = dictionary[geneId] +  '\t' + str(log) + '\t' + pValue
         return header           
