@@ -27,11 +27,13 @@ def main(argv):
 
 #Read all the files in directory and process them one by one
 def loopDirectory(directory,resultDirectory):
+    
     print("Reading from directory ==> " + directory)
     for fn in os.listdir(directory):
-        
+        print("#===============***===================>  New Record  <===============***===================#")    
         if os.path.isfile(os.path.join(directory,fn)):
             # call method to process the file
+            print("Reading from file ==> " + fn)
             fn = directory+fn
             processFasta(fn, resultDirectory)
         else:
