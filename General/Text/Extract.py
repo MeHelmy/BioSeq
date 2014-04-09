@@ -3,25 +3,23 @@ Created on Mar 10, 2014
 
 @author: medhat
 '''
-import sys , getopt
+import sys , getopt ,re
 
-#===============================================================================
-# def main(argv):
-#     inputFile = ''
-#    
-#     try:
-#         opts, args = getopt.getopt(argv, "hi:", ["ifile="])
-#     except getopt.GetoptError:
-#         print 'Extract.py -i <inputfile>'
-#         sys.exit(2)
-#     for opt, arg in opts:
-#         if opt == '-h':
-#             print 'Extract.py -i <inputfile>'
-#             sys.exit()
-#         elif opt in ("-i", "--ifile"):
-#             inputFile = arg
-#             extractData(inputFile)
-#===============================================================================
+def main(argv):
+    inputFile = ''
+    
+    try:
+        opts, args = getopt.getopt(argv, "hi:", ["ifile="])
+    except getopt.GetoptError:
+        print 'Extract.py -i <inputfile>'
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            print 'Extract.py -i <inputfile>'
+            sys.exit()
+        elif opt in ("-i", "--ifile"):
+            inputFile = arg
+            extractData(inputFile)
              
  # function take file as input and extract data based on a column and write it to output file
 def extractData(inputFile):
@@ -46,7 +44,7 @@ def extractData(inputFile):
                 else:
                     fastaName=fastaName +'\t1\t-'
                 
-                genIdFile.write(str(lineColumns[2]) + '\t' + str(lineColumns[3]) + '\t' + str(lineColumns[4])+ '\t' + fastaName +'\n')
+                genIdFile.write(str(re.findall(r'\d+',lineColumns[2])[0]) + '\t' + str(lineColumns[3]) + '\t' + str(lineColumns[4])+ '\t' + fastaName +'\n')
                 
         fo.close()
         genIdFile.close()        
@@ -55,5 +53,7 @@ def extractHeader(inFile):
     with open(inFile, 'r') as f:
         first_line = f.readline()
         return first_line 
-    
-extractData("/home/medhat/Samples/merge_test/merged_seq_report_sorted.txt")
+
+if __name__ == "__main__":
+    main(sys.argv[1:])     
+#extractData("/home/medhat/Samples/merge_test/merged_seq_report_sorted.txt")

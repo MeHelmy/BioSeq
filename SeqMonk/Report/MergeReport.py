@@ -25,6 +25,7 @@ def main(argv):
 
 def getMergeDataFromFile(inputFile):
         fileData = open(inputFile,'r')
+        # count number of lines in file
         num_lines = sum(1 for row in open(inputFile) if row.rstrip())
         i = 1
         mergedData = {}
@@ -50,10 +51,12 @@ def addToDicFromFile(dictionary , inputFile,i,header):
                 begin = begin * (i-1) 
         else:
                 begin = '' 
-                  
+                       
         for line in fileData:
             colum=line.split('\t')
             geneId = str(colum[7])
+            samples = {}
+            # i can make this dynamic by using dictionary the where the name is the column name and the value will be the value in the column 
             sample1 = str(colum[12])
             sample2 = str(colum[13])
             sample3 = str(colum[14])
