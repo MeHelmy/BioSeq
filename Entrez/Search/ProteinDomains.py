@@ -1,11 +1,9 @@
 '''
-Created on Mar 28, 2014
+Created on Apr 23, 2014
 
 @author: medhat
 '''
-from Bio.Seq import Seq, translate
-from Bio.Alphabet import IUPAC
-import os  ,sys , getopt ,textwrap
+import subprocess,os,sys,getopt
 
 def main(argv):
     scriptName = os.path.basename(__file__)
@@ -22,45 +20,53 @@ def main(argv):
             inputFile = arg
         elif opt in ("-o", "--ofile"):
             outputFile = arg
-    loopDirectory(inputFile, outputFile)        
+    loopDirectory(inputFile, outputFile)
+
 
 #Read all the files in directory and process them one by one
 def loopDirectory(directory,resultDirectory):
-    
+        
     print("Reading from directory ==> " + directory)
     for fn in os.listdir(directory):
         print("#===============***===================>  New Record  <===============***===================#")    
         if os.path.isfile(os.path.join(directory,fn)):
             # call method to process the file
+            fileName = str(fn).rsplit('.',1)[0]
             print("Reading from file ==> " + fn)
             fn = directory+fn
-            processFasta(fn, resultDirectory)
+            # forming the command this is based on the read me pfam help command
+            cmd = 'perl ~/source/PfamScan/pfam_scan.pl -fasta '+ fn +' -dir ~/Downloads/pfam-files'
+            
+            processFasta(cmd, resultDirectory,fileName)
         else:
             print("Sorry "+fn+" Is not a file")
-            
-def processFasta(fastaFile,resultDirectory):
+ 
+def processFasta(cmd,resultDirectory,fileName):
     print("Writing to directory #==> " + resultDirectory)
-    sequence = readFastaAsString(fastaFile)
-    coding_dna = Seq(sequence, IUPAC.unambiguous_dna)
-    baseFile = os.path.basename(fastaFile)
-    fo = open(resultDirectory+baseFile,'w')
-    transaltedCode = translate(coding_dna)
-    strOfTrans = str(transaltedCode)
-    t = textwrap.wrap(strOfTrans, width=60)
-    fo.write(">"+str(baseFile).rsplit('.',1)[0] +"\n")
-    for line in t:
-        fo.write(line+'\n')      
+    foDic = open("found_domains.txt",'a')
+    firstTime = True
+    if os.path.exists(resultDirectory):
+        fo=open(resultDirectory,'a')
+    else:
+        fo = open(resultDirectory,'w') 
      
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+    out, err = p.communicate() 
+    result = out.split('\n')
+    for lin in result:
+        if not lin.startswith('#') and  lin:
+
+            if firstTime:
+                fo.write("=========================================================\n")
+                fo.write(fileName+'\n')
+                foDic.write(fileName+'\n')
+                firstTime = False
+                        
+            fo.write(lin+'\n')
+    
     fo.close()
     
-def readFastaAsString(fastaFile):
-    fo = open(fastaFile)
-    fo.next()
-    sequence = ''
-    for line in fo:
-        line = line.strip()
-        sequence = sequence + line
-    return sequence         
-             
 if __name__ == "__main__":
     main(sys.argv[1:])  
+
+
