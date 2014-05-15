@@ -2,13 +2,15 @@
 Created on Feb 26, 2014
 
 @author: medhat
+
+the input i a guide file contains the ordered text that you want to merge
 '''
 import sys , getopt , re 
 
 
 def main(argv):
     inputFile = ''
-
+ 
     try:
         opts, args = getopt.getopt(argv,"hi:",["ifile="])
     except getopt.GetoptError:
@@ -26,6 +28,8 @@ def main(argv):
 def getMergeDataFromFile(inputFile):
         fileData = open(inputFile,'r')
         # count number of lines in file
+        #linelist = f.readlines()
+        #count = len(linelist)
         num_lines = sum(1 for row in open(inputFile) if row.rstrip())
         i = 1
         mergedData = {}
@@ -96,6 +100,7 @@ def writeDic(dic ,header):
             fo.write(value + addString + '\n')
         
     fo.close()
-
+ 
 if __name__ == "__main__":
     main(sys.argv[1:])     
+
