@@ -67,8 +67,9 @@ def unblasted(seqFromFile):
             # creat two dictionaryes for each
             differenceFile = open(os.path.split(os.path.abspath(seqFromFile))[0]+"/differenceSequence.txt",'a')
             for k in seqFromFileDic:
-                print(k+"-- in outer loop")
                 if k not in xmlFileDic:
+                    k= k.strip()
+                    #k = k.replace('\n','')
                     differenceFile.write(k+'\n')
             differenceFile.close()
                       
